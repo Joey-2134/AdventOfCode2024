@@ -25,7 +25,6 @@ fs.readFile("./input.txt", 'utf-8', (err, inputData) => {
         }
     }
 
-
     let sum = 0;
     for (let i = 0; i < numPairs.length; i++) {
         sum += numPairs[i][0] * numPairs[i][1];
