@@ -11,13 +11,14 @@ fs.readFile("./input.txt", 'utf-8', (err, inputData) => {
         });
     })
 
-    const word = "MAS";
+    const word = "X";
+
     let foundSum = 0;
     let xDir = [-1,-1, 1, 1];
     let yDir = [-1, 1,-1, 1];
 
     for (let [key, value] of gridMap) {
-        if (value === word[1]) {
+        if (value === word[Math.floor(word.length / 2)]) {
             let [x, y] = key.split(",").map(Number);
             let foundCount = 0;
             for (let d = 0; d < 4; d++) {
@@ -35,6 +36,19 @@ fs.readFile("./input.txt", 'utf-8', (err, inputData) => {
 });
 
 function checkDirection(x, y, dirX, dirY, word, gridMap) {
-    return (gridMap.get(`${x + dirX},${y + dirY}`) === word[0] && gridMap.get(`${x - dirX},${y - dirY}`) === word[2]);
+
+    let isFound = true;
+    let i = 1;
+    while (i <= Math.floor(word.length / 2) && isFound) {
+        let leftChar = gridMap.get(`${x + i * dirX},${y + i * dirY}`);
+        let rightChar = gridMap.get(`${x - i * dirX},${y - i * dirY}`);
+
+        if (leftChar === word[Math.floor(word.length / 2) - i] && rightChar === word[Math.floor(word.length / 2) + i]) {
+            i++;
+        } else {
+            isFound = false;
+        }
+    }
+    return isFound;
 }
 
