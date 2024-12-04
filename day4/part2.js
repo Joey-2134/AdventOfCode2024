@@ -1,71 +1,40 @@
 const fs = require("fs");
 
 let data;
-
 fs.readFile("./input.txt", 'utf-8', (err, inputData) => {
     if (err) return;
     data = inputData.split("\n");
-    for (let i = 0; i < data.length; i++) {
-        data[i] = data[i].split("");
-    }
+    const gridMap = new Map();
+    data.forEach((row, y) => {
+        [...row].forEach((letter, x) => {
+            gridMap.set(`${x},${y}`, letter);
+        });
+    })
 
+    const word = "MAS";
     let foundSum = 0;
-    const rows = data.length;
-    const cols = data[0].length;
+    let xDir = [-1,-1, 1, 1];
+    let yDir = [-1, 1,-1, 1];
 
-    for (let i = 1; i < rows; i++) {
-        for (let j = 1; j < cols; j++) {
-            if (data[i][j] === "A") {
-
-                if (validCoord(i - 1, j - 1, rows, cols) &&
-                    validCoord(i - 1, j + 1, rows, cols) &&
-                    validCoord(i + 1, j - 1, rows, cols) &&
-                    validCoord(i + 1, j + 1, rows, cols) &&
-                    data[i - 1][j - 1] === "M" &&
-                    data[i - 1][j + 1] === "S" &&
-                    data[i + 1][j - 1] === "M" &&
-                    data[i + 1][j + 1] === "S") {
-                    foundSum += 1;
+    for (let [key, value] of gridMap) {
+        if (value === word[1]) {
+            let [x, y] = key.split(",").map(Number);
+            let foundCount = 0;
+            for (let d = 0; d < 4; d++) {
+                if (checkDirection(x, y, xDir[d], yDir[d], word, gridMap)) {
+                    foundCount++;
                 }
-
-                if (validCoord(i - 1, j - 1, rows, cols) &&
-                    validCoord(i - 1, j + 1, rows, cols) &&
-                    validCoord(i + 1, j - 1, rows, cols) &&
-                    validCoord(i + 1, j + 1, rows, cols) &&
-                    data[i - 1][j - 1] === "M" &&
-                    data[i - 1][j + 1] === "M" &&
-                    data[i + 1][j - 1] === "S" &&
-                    data[i + 1][j + 1] === "S") {
-                    foundSum += 1;
-                }
-
-                if (validCoord(i - 1, j - 1, rows, cols) &&
-                    validCoord(i - 1, j + 1, rows, cols) &&
-                    validCoord(i + 1, j - 1, rows, cols) &&
-                    validCoord(i + 1, j + 1, rows, cols) &&
-                    data[i - 1][j - 1] === "S" &&
-                    data[i - 1][j + 1] === "M" &&
-                    data[i + 1][j - 1] === "S" &&
-                    data[i + 1][j + 1] === "M") {
-                    foundSum += 1;
-                }
-
-                if (validCoord(i - 1, j - 1, rows, cols) &&
-                    validCoord(i - 1, j + 1, rows, cols) &&
-                    validCoord(i + 1, j - 1, rows, cols) &&
-                    validCoord(i + 1, j + 1, rows, cols) &&
-                    data[i - 1][j - 1] === "S" &&
-                    data[i - 1][j + 1] === "S" &&
-                    data[i + 1][j - 1] === "M" &&
-                    data[i + 1][j + 1] === "M") {
-                    foundSum += 1;
-                }
+            }
+            if (foundCount >= 2) {
+                foundSum ++;
             }
         }
     }
+
     console.log(foundSum);
 });
 
-function validCoord(x, y, rows, cols) {
-    return x >= 0 && x < rows && y >= 0 && y < cols;
+function checkDirection(x, y, dirX, dirY, word, gridMap) {
+    return (gridMap.get(`${x + dirX},${y + dirY}`) === word[0] && gridMap.get(`${x - dirX},${y - dirY}`) === word[2]);
 }
+

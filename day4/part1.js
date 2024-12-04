@@ -1,8 +1,6 @@
 const fs = require("fs");
 
 let data;
-let foundSum = 0;
-
 fs.readFile("./input.txt", 'utf-8', (err, inputData) => {
     if (err) return;
     data = inputData.split("\n");
@@ -13,7 +11,7 @@ fs.readFile("./input.txt", 'utf-8', (err, inputData) => {
         });
     })
 
-    const word = "testing";
+    const word = "XMAS";
     let foundSum = 0;
 
     let xDir = [-1, -1, -1, 0, 0, 1, 1, 1];
