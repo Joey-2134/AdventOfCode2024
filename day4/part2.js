@@ -9,9 +9,9 @@ fs.readFile("./input.txt", 'utf-8', (err, inputData) => {
         [...row].forEach((letter, x) => {
             gridMap.set(`${x},${y}`, letter);
         });
-    })
+    });
 
-    const word = "X";
+    const word = "MAS";
 
     let foundSum = 0;
     let xDir = [-1,-1, 1, 1];
