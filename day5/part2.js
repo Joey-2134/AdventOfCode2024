@@ -38,9 +38,9 @@ function validateUpdate(update, rulesMap) {
     if (typeof resp === "boolean") return update;
 
     if (Array.isArray(resp)) {
-        const [i, j] = resp;
-        let insertVal = update.splice(j, 1)[0];
-        update.splice(i, 0, insertVal);
+        const [valIdx, keyIdx] = resp;
+        let insertVal = update.splice(keyIdx, 1)[0];
+        update.splice(valIdx, 0, insertVal);
         return validateUpdate(update, rulesMap);
     }
     return validateUpdate(update, rulesMap);
